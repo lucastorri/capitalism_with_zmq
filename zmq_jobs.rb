@@ -102,6 +102,7 @@ class ThirdWorldPoorCountryManager < Capitalist
     loop do
       request = wait_for_gringos_call
       scream "Maaaan, the gringo needs #{request}. Let's work cabrones!"
+      put_people_back_to_work_and_make request
       notify_gringo_that_its_being_done request
     end
   end
