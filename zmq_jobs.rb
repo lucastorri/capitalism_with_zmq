@@ -7,6 +7,7 @@ require 'yaml'
 class Capitalist
   
   def initialize
+    puts self.class
     @ctx = ZMQ::Context.new(1)
   end
   
@@ -168,9 +169,6 @@ end
 def configurate
   configs = YAML::load(open 'jobs_conf.yml')
   
-  @@MANAGER_EMPLOYEE_PORT = configs['manager_employee_port_base']
-  @@EMPLOYEE_THIRD_WORLD_MANAGER_PORT = configs['employee_third_world_manager_port_base']
-  @@THIRD_WORLD_MANAGER_WORKER_PORT = configs['third_world_manager_worker_port_base']
   @@PROTOCOL = configs['protocol']
   @@WARM_UP_TIME = configs['warm_up_time']
   
@@ -190,7 +188,7 @@ def run
   when 'manager'
     qty.times do |i|
       dudes << Manager.new( configs['nap_time'], 
-                            "#{@@PROTOCOL}://#{configs['accept_conections_from']}:#{@@MANAGER_EMPLOYEE_PORT + (i+1)}" )
+                            "#{@@PROTOCOL}://#{configs['accept_conections_from_address']}:#{configs['accept_conections_from_port']}" )
     end
     
   when 'employee'
@@ -203,8 +201,8 @@ def run
   when 'worker_manager'
     qty.times do |i|
       dudes << ThirdWorldPoorCountryManager.new( (i+1), 
-                            "#{@@PROTOCOL}://#{configs['accept_requests_from']}:#{@@EMPLOYEE_THIRD_WORLD_MANAGER_PORT + (i+1)}",
-                            "#{@@PROTOCOL}://#{configs['forward_requests_to']}:#{@@THIRD_WORLD_MANAGER_WORKER_PORT + (i+1)}" )
+                            "#{@@PROTOCOL}://#{configs['accept_requests_from_address']}:#{configs['accept_requests_from_port']}",
+                            "#{@@PROTOCOL}://#{configs['forward_requests_to_address']}:#{configs['forward_requests_to_port']}" )
     end
     
   when 'poor_worker'

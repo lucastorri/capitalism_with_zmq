@@ -1,12 +1,10 @@
 protocol: tcp
-manager_employee_port_base: 12100
-employee_third_world_manager_port_base: 12200
-third_world_manager_worker_port_base: 12300
 warm_up_time: 5
 
 manager:
   listen_everyone:
-    accept_conections_from: *
+    accept_conections_from_address: *
+    accept_conections_from_port: 12101
     nap_time: 10
 
 employee:
@@ -20,11 +18,23 @@ employee:
     boss_port: 12101
     outsource_address: 127.0.0.1
     outsource_port: 12202
+  zmq1:
+    boss_address: 127.0.0.1
+    boss_port: 12101
+    outsource_address: 192.168.56.101
+    outsource_port: 12201
+  zmq2:
+    boss_address: 127.0.0.1
+    boss_port: 12101
+    outsource_address: 192.168.56.102
+    outsource_port: 12201
   
 worker_manager:
-  listen_everyone:
-    accept_requests_from: *
-    forward_requests_to: *
+  listen1:
+    accept_requests_from_address: *
+    accept_requests_from_port: 12201
+    forward_requests_to_address: *
+    forward_requests_to_port: 12301
   
 poor_worker:
   number1:
